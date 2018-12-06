@@ -11,6 +11,7 @@ session.on({
 
   // This function runs when session.connect() asynchronously completes
   sessionConnected: function () {
+      console.log('Connected to session: ' + sessionId);
     // Publish the publisher we initialzed earlier (this will trigger 'streamCreated' on other
     // clients)
     session.publish(publisher);
@@ -18,8 +19,13 @@ session.on({
 
   // This function runs when another client publishes a stream (eg. session.publish())
   streamCreated: function (event) {
+      console.log(`Stream ${event.stream.name} joined.`);
     session.subscribe(event.stream, 'subscribers', { insertMode: 'append' });
-  }
+  },
+
+    streamDestroyed: function(event) {
+        console.log(`Stream ${event.stream.name} ended because ${event.reason}.`);
+    }
 
 });
 
